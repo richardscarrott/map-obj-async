@@ -29,7 +29,8 @@
 		"modify",
 		"deep",
 		"recurse",
-		"recursive"
+		"recursive",
+		"async"
 	],
 	"devDependencies": {
 		"ava": "^3.15.0",

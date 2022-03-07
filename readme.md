@@ -1,11 +1,13 @@
-# map-obj
+# map-obj-async
 
-> Map object keys and values into a new object
+> Asynchronously map object keys and values into a new object
+
+This is a fork of [`map-obj`](https://github.com/sindresorhus/map-obj) and intends to expose the same API but with support for async mapping functions.
 
 ## Install
 
 ```sh
-npm install map-obj
+npm install map-obj-async
 ```
 
 ## Usage
@@ -13,16 +15,19 @@ npm install map-obj
 ```js
 import mapObject, {mapObjectSkip} from 'map-obj';
 
-const newObject = mapObject({foo: 'bar'}, (key, value) => [value, key]);
+const newObject = await mapObject({foo: 'bar'}, (key, value) => [value, key]);
 //=> {bar: 'foo'}
 
-const newObject = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value]);
+const newObject = await mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value]);
 //=> {foo: true, bar: {bAz: true}}
 
-const newObject = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value], {deep: true});
+const newObject = await mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value], {deep: true});
 //=> {foo: true, bar: {baz: true}}
 
-const newObject = mapObject({one: 1, two: 2}, (key, value) => value === 1 ? [key, value] : mapObjectSkip);
+const newObject = await mapObject({one: 1, two: 2}, (key, value) => value === 1 ? [key, value] : mapObjectSkip);
+//=> {one: 1}
+
+const newObject = await mapObject({one: 1, two: 2}, async (key, value) => value === 1 ? [key, value] : mapObjectSkip);
 //=> {one: 1}
 ```
 
@@ -38,7 +43,7 @@ The source object to copy properties from.
 
 #### mapper
 
-Type: `(sourceKey, sourceValue, source) => [targetKey, targetValue, mapperOptions?] | mapObjectSkip`
+Type: `(sourceKey, sourceValue, source) => [targetKey, targetValue, mapperOptions?] | mapObjectSkip | Promise<[targetKey, targetValue, mapperOptions?] | mapObjectSkip>`
 
 A mapping function.
 
@@ -82,7 +87,7 @@ import mapObject, {mapObjectSkip} from 'map-obj';
 
 const object = {one: 1, two: 2}
 const mapper = (key, value) => value === 1 ? [key, value] : mapObjectSkip
-const result = mapObject(object, mapper);
+const result = await mapObject(object, mapper);
 
 console.log(result);
 //=> {one: 1}
@@ -90,16 +95,4 @@ console.log(result);
 
 ## Related
 
-- [filter-obj](https://github.com/sindresorhus/filter-obj) - Filter object keys and values into a new object
-
----
-
-<div align="center">
-	<b>
-		<a href="https://tidelift.com/subscription/pkg/npm-map-obj?utm_source=npm-map-obj&utm_medium=referral&utm_campaign=readme">Get professional support for this package with a Tidelift subscription</a>
-	</b>
-	<br>
-	<sub>
-		Tidelift helps make open source sustainable for maintainers while giving companies<br>assurances about security, maintenance, and licensing for their dependencies.
-	</sub>
-</div>
+- [map-obj](https://github.com/sindresorhus/map-obj) - Synchronously map object keys and values into a new object

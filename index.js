@@ -7,7 +7,7 @@ const isObjectCustom = value =>
 	&& !(value instanceof Error)
 	&& !(value instanceof Date);
 
-export const mapObjectSkip = Symbol('mapObjectSkip');
+const mapObjectSkip = Symbol('mapObjectSkip');
 
 const _mapObject = async (object, mapper, options, isSeen = new WeakMap()) => {
 	options = {
@@ -56,7 +56,7 @@ const _mapObject = async (object, mapper, options, isSeen = new WeakMap()) => {
 	return target;
 };
 
-export default async function mapObject(object, mapper, options) {
+async function mapObject(object, mapper, options) {
 	if (!isObject(object)) {
 		throw new TypeError(`Expected an object, got \`${object}\` (${typeof object})`);
 	}
@@ -67,3 +67,7 @@ export default async function mapObject(object, mapper, options) {
 
 	return _mapObject(object, mapper, options);
 }
+
+module.exports = mapObject;
+
+module.exports.mapObjectSkip = mapObjectSkip;

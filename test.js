@@ -1,5 +1,6 @@
-import test from 'ava';
-import mapObject, {mapObjectSkip} from './index.js';
+const test = require('ava');
+const mapObject = require('./index.js');
+const {mapObjectSkip} = require('./index.js');
 
 test('main', async t => {
 	t.is((await mapObject({foo: 'bar'}, key => [key, 'unicorn'])).foo, 'unicorn');

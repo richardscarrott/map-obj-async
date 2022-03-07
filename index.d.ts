@@ -7,7 +7,7 @@ import mapObject, {mapObjectSkip} from 'map-obj';
 
 const object = {one: 1, two: 2}
 const mapper = (key, value) => value === 1 ? [key, value] : mapObjectSkip
-const result = mapObject(object, mapper);
+const result = await mapObject(object, mapper);
 
 console.log(result);
 //=> {one: 1}
@@ -23,7 +23,11 @@ export type Mapper<
 	sourceKey: keyof SourceObjectType,
 	sourceValue: SourceObjectType[keyof SourceObjectType],
 	source: SourceObjectType
-) => [
+) => Promise<[
+	targetKey: MappedObjectKeyType,
+	targetValue: MappedObjectValueType,
+	mapperOptions?: MapperOptions,
+] | typeof mapObjectSkip> | [
 	targetKey: MappedObjectKeyType,
 	targetValue: MappedObjectValueType,
 	mapperOptions?: MapperOptions,
@@ -74,16 +78,16 @@ Map object keys and values into a new object.
 ```
 import mapObject, {mapObjectSkip} from 'map-obj';
 
-const newObject = mapObject({foo: 'bar'}, (key, value) => [value, key]);
+const newObject = await mapObject({foo: 'bar'}, (key, value) => [value, key]);
 //=> {bar: 'foo'}
 
-const newObject = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value]);
+const newObject = await mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value]);
 //=> {foo: true, bar: {bAz: true}}
 
-const newObject = mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value], {deep: true});
+const newObject = await mapObject({FOO: true, bAr: {bAz: true}}, (key, value) => [key.toLowerCase(), value], {deep: true});
 //=> {foo: true, bar: {baz: true}}
 
-const newObject = mapObject({one: 1, two: 2}, (key, value) => value === 1 ? [key, value] : mapObjectSkip);
+const newObject = await mapObject({one: 1, two: 2}, (key, value) => value === 1 ? [key, value] : mapObjectSkip);
 //=> {one: 1}
 ```
 */
@@ -100,7 +104,7 @@ export default function mapObject<
 	MappedObjectValueType
 	>,
 	options: DeepOptions & TargetOptions<TargetObjectType>
-): TargetObjectType & Record<string, unknown>;
+): Promise<TargetObjectType & Record<string, unknown>>;
 export default function mapObject<
 	SourceObjectType extends Record<string, unknown>,
 	MappedObjectKeyType extends string,
@@ -113,7 +117,7 @@ export default function mapObject<
 	MappedObjectValueType
 	>,
 	options: DeepOptions
-): Record<string, unknown>;
+): Promise<Record<string, unknown>>;
 export default function mapObject<
 	SourceObjectType extends Record<string, any>,
 	TargetObjectType extends Record<string, any>,
@@ -127,7 +131,7 @@ export default function mapObject<
 	MappedObjectValueType
 	>,
 	options: TargetOptions<TargetObjectType>
-): TargetObjectType & {[K in MappedObjectKeyType]: MappedObjectValueType};
+): Promise<TargetObjectType & {[K in MappedObjectKeyType]: MappedObjectValueType}>;
 export default function mapObject<
 	SourceObjectType extends Record<string, any>,
 	MappedObjectKeyType extends string,
@@ -140,4 +144,4 @@ export default function mapObject<
 	MappedObjectValueType
 	>,
 	options?: Options
-): {[K in MappedObjectKeyType]: MappedObjectValueType};
+): Promise<{[K in MappedObjectKeyType]: MappedObjectValueType}>;

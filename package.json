@@ -1,15 +1,9 @@
 {
-	"name": "map-obj",
-	"version": "5.0.1",
-	"description": "Map object keys and values into a new object",
+	"name": "map-obj-async",
+	"version": "0.0.1",
+	"description": "Asynchronously map object keys and values into a new object",
 	"license": "MIT",
-	"repository": "sindresorhus/map-obj",
-	"funding": "https://github.com/sponsors/sindresorhus",
-	"author": {
-		"name": "Sindre Sorhus",
-		"email": "sindresorhus@gmail.com",
-		"url": "https://sindresorhus.com"
-	},
+	"repository": "richardscarrott/map-obj-async",
 	"type": "module",
 	"exports": "./index.js",
 	"engines": {
@@ -39,7 +33,7 @@
 	],
 	"devDependencies": {
 		"ava": "^3.15.0",
-		"tsd": "^0.18.0",
+		"tsd": "^0.19.1",
 		"xo": "^0.45.0"
 	}
 }
